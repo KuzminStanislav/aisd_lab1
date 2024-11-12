@@ -20,4 +20,3 @@ public:
 
 	bool is_above(const Point<T>& point) const;
 };
-
