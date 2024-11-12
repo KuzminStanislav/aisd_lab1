@@ -72,3 +72,46 @@ image<bool> image::operator+(T scalar) const { // + with scalar
 	}
 	return result;
 }
+
+image<T> image::operator!() const { // inversion
+	image<T> result(_width, _height);
+	for (size_t i = 0; i < _height; ++i) {
+		for (size_t j = 0; j < _width; ++j) {
+			result(i, j) = std::numeric_limits<T>::max() - data[i][j];
+		}
+	}
+	return result;
+}
+
+float image::fill_coefficient() const {
+	float sum = 0;
+	T max_value = std::numeric_limits<T>::max();
+	size_t total_elements = _width * _height;
+
+	for (const auto& row : data) {
+		for (const auto& value : row) {
+			sum += value;
+		}
+	}
+	return sum / (total_elements * max_value);
+}
+
+void image::invert_above(const Line<T>& line) {
+	for (size_t i = 0; i < height; ++i) {
+		for (size_t j = 0; j < width; ++j) {
+			Point<T> curr_point(j, i);
+			if (line.is_above(curr_point)) {
+				data[i][j] = std::numeric_limits<T>::max() - data[i][j];
+			}
+		}
+	}
+}
+
+void image::print() const {
+	for (const auto& row : data) {
+		for (const auto& value : row) {
+			std::cout << static_cast<int>(value) << " ";
+		}
+		std::cout << std::endl;
+	}
+}
