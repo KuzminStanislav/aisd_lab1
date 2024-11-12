@@ -33,3 +33,42 @@ const T& image::operator()(size_t x, size_t y) const {
 	return data[y][x];
 }
 
+image<bool> image::operator*(const image<bool>& other) const { // * for bool
+	image<bool> result(_width, _height);
+	for (size_t i = 0; i < _height; ++i) {
+		for (size_t j = 0; j < _width; ++j) {
+			result(i, j) = this->data[i][j] && other.data[i][j];
+		}
+	}
+	return result;
+}
+
+image<bool> image::operator+(const image<bool>& other) const { // + for bool
+	image<bool> result(_width, _height);
+	for (size_t i = 0; i < _height; ++i) {
+		for (size_t j = 0; j < _width; ++j) {
+			result(i, j) = this->data[i][j] || other.data[i][j];
+		}
+	}
+	return result;
+}
+
+image<bool> image::operator*(T scalar) const { // * with scalar
+	image<bool> result(_width, _height);
+	for (size_t i = 0; i < _height; ++i) {
+		for (size_t j = 0; j < _width; ++j) {
+			result(i, j) = std::min(static_cast<T>(data[i][j] * scalar), static_cast<T>(255)); // for char
+		}
+	}
+	return result;
+}
+
+image<bool> image::operator+(T scalar) const { // + with scalar
+	image<bool> result(_width, _height);
+	for (size_t i = 0; i < _height; ++i) {
+		for (size_t j = 0; j < _width; ++j) {
+			result(i, j) = std::min(static_cast<T>(data[i][j] + scalar), static_cast<T>(255)); // for char
+		}
+	}
+	return result;
+}
